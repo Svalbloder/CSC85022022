@@ -5,6 +5,8 @@ Renderer::Renderer(Window& parent) : OGLRenderer(parent) {
 
     matrixShader = new Shader("MatrixVertex.glsl", "colourFragment.glsl");
 
+
+    camera = new Camera();
     if (!matrixShader->LoadSuccess()) {
         return;
     }
@@ -44,4 +46,24 @@ void Renderer::SwitchToOrthographic() {
         glUniformMatrix4fv(glGetUniformLocation(matrixShader->GetProgram(), "modelMatrix"), 1, false, modelMatrix.values);
         triangle->Draw();
     }
+}
+
+void OGLRenderer::UpdateShaderMatrices() {
+    if (currentShader) {
+        glUniformMatrix4fv(
+            glGetUniformLocation(currentShader->GetProgram(), "modelMatrix"), 1, false, modelMatrix.values);
+
+        glUniformMatrix4fv(
+            glGetUniformLocation(currentShader->GetProgram(), "viewMatrix"), 1, false, viewMatrix.values);
+
+        glUniformMatrix4fv(
+            glGetUniformLocation(currentShader->GetProgram(), "projMatrix"), 1, false, projMatrix.values);
+
+        glUniformMatrix4fv(
+            glGetUniformLocation(currentShader->GetProgram(), "textureMatrix"), 1, false, textureMatrix.values);
+    }
+}
+void Renderer::UpdateScene(float dt) {
+    camera->UpdateCamera(dt);
+    viewMatrix = camera->BuildViewMatrix();
 }

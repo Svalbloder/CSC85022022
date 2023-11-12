@@ -15,8 +15,11 @@ int main() {
     float scale = 100.0f;
     float rotation = 0.0f;
     Vector3 position(0, 0, -1500.0f);
+    
+        
 
-    while (w.UpdateWindow() && !Window::GetKeyboard()->KeyDown(KEYBOARD_ESCAPE)) {
+     while (w.UpdateWindow() && !Window::GetKeyboard()->KeyDown(KEYBOARD_ESCAPE))
+     {
         if (Window::GetKeyboard()->KeyDown(KEYBOARD_1))
             renderer.SwitchToOrthographic();
         if (Window::GetKeyboard()->KeyDown(KEYBOARD_2))
@@ -52,6 +55,9 @@ int main() {
         renderer.SetPosition(position);
         renderer.RenderScene();
         renderer.SwapBuffers();
+        renderer.UpdateScene(w.GetTimer()->GetTimeDeltaSeconds());
+        renderer.RenderScene();
+     
     }
 
     return 0;
